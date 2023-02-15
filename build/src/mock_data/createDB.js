@@ -1,24 +1,20 @@
-import {Connection} from 'mysql';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createTestDB = void 0;
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
-
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
 dotenv.config();
-
-import conf from '../config/general.config';
-
-
-export const createTestDB= () => {
-  const connection: Connection = mysql.createConnection({
-      multipleStatements: true,
-      host: conf.HOST,
-      user: conf.USERNAME,
-      password: conf.PASSWORD
-  });
-
-  const hashed_password = bcrypt.hashSync("xxx", 10);
-
-  const query = `
+const general_config_1 = require("../config/general.config");
+const createTestDB = () => {
+    const connection = mysql.createConnection({
+        multipleStatements: true,
+        host: general_config_1.default.HOST,
+        user: general_config_1.default.USERNAME,
+        password: general_config_1.default.PASSWORD
+    });
+    const hashed_password = bcrypt.hashSync("xxx", 10);
+    const query = `
   CREATE DATABASE test; USE test;
 
   CREATE TABLE users (
@@ -63,14 +59,14 @@ export const createTestDB= () => {
 
   INSERT INTO users (balance, permissions, password, username)
   VALUES (1000.00, 'user', '${hashed_password}', 'test2');
-  `
-
-  connection.query(query, (error, elements) => {
-      if (error) {
-      console.log(error);
-      }
-
-      //   console.log(elements);
-      connection.end()
-  })
-}
+  `;
+    connection.query(query, (error, elements) => {
+        if (error) {
+            console.log(error);
+        }
+        //   console.log(elements);
+        connection.end();
+    });
+};
+exports.createTestDB = createTestDB;
+//# sourceMappingURL=createDB.js.map

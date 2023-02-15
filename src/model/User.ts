@@ -1,4 +1,3 @@
-import {request} from 'http';
 import {connection} from '../utils/db';
 const bcrypt = require('bcrypt');
 import {log} from '../utils/logger';
@@ -70,12 +69,13 @@ const checkUser = (req: any, res: object): Promise<User> => {
     const query =
       'SELECT * ' + 'FROM users ' + `WHERE username = "${req.username}"`;
 
+      console.log(query);
     connection.query(query, (error, elements) => {
       if (error) {
         log.error(error);
         return reject(error);
       }
-
+      console.log(elements)
       if (elements.length < 1) {
         log.error('wrong password or username');
         return reject('Error: Wrong password or username');

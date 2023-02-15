@@ -6,19 +6,19 @@ dotenv.config();
 
 import conf from '../config/general.config';
 
-const connection: Connection = mysql.createConnection({
-    host: conf.HOST,
-    user: conf.USERNAME,
-    password: conf.PASSWORD
-});
+export const deleteTestDB = () => {
+    const connection: Connection = mysql.createConnection({
+        host: conf.HOST,
+        user: conf.USERNAME,
+        password: conf.PASSWORD
+    });
 
-const query = "DROP DATABASE test";
+    const query = "DROP DATABASE test";
 
-connection.query(query, (error, elements) => {
-    if (error) {
-    console.log(error);
-    }
-
-    //   console.log(elements);
-    connection.end()
-})
+    connection.query(query, (error, elements) => {
+        if (error) {
+        console.log(error);
+        }
+        connection.end()
+    })
+}
