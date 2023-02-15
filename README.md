@@ -1,2 +1,2 @@
 # wallet
-wallet exercise 
+This is a wallet application  
