@@ -18,7 +18,9 @@
     "posttest": "npm run lint",
     "start": "ts-node ./src/service/index.ts",
     "test": "jest --watchAll",
-    "build": "tsc"
+    "build": "tsc",
+    "create": "ts-node ./src/mock_data/createDB.ts",
+    "delete": "ts-node ./src/mock_data/deleteDB.ts"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
