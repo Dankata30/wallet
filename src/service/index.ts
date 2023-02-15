@@ -11,8 +11,13 @@ import {
 } from '../controller/TransactionsController';
 import {log} from '../utils/logger';
 
+const dotenv = require('dotenv')
+dotenv.config();
+
+import conf from "../config/general.config"
+
 const http = require('http');
-const port = 3000;
+const port = conf.PORT;
 
 const requestListener = (req: any, res: any) => {
   res.setHeader('Content-Type', 'application/json');
