@@ -8,8 +8,10 @@ dotenv.config();
 import conf from '../config/general.config';
 
 
-export const createTestDB= () => {
-  const connection: Connection = mysql.createConnection({
+export const createTestDB= () : Promise<void> => {
+
+  return new Promise ((resolve, reject)=>{
+    const connection: Connection = mysql.createConnection({
       multipleStatements: true,
       host: conf.HOST,
       user: conf.USERNAME,
@@ -19,9 +21,11 @@ export const createTestDB= () => {
   const hashed_password = bcrypt.hashSync("xxx", 10);
 
   const query = `
-  CREATE DATABASE test; USE test;
+  CREATE DATABASE IF NOT EXISTS test; 
+  
+  USE test;
 
-  CREATE TABLE users (
+  CREATE TABLE IF NOT EXISTS users (
     user_id INT NOT NULL AUTO_INCREMENT,
     balance DECIMAL(0) NULL DEFAULT 0.0,
     permissions ENUM('admin', 'user') NOT NULL,
@@ -30,7 +34,7 @@ export const createTestDB= () => {
     PRIMARY KEY (user_id)
   );
 
-  CREATE TABLE transactions (
+  CREATE TABLE IF NOT EXISTS transactions (
     t_id INT NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
     type ENUM('withdraw', 'deposit') NOT NULL,
@@ -44,7 +48,7 @@ export const createTestDB= () => {
       ON UPDATE NO ACTION
   );
 
-  CREATE TABLE sessions (
+  CREATE TABLE IF NOT EXISTS sessions (
     session_id INT NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
     is_active ENUM('true', 'false') NULL DEFAULT 'true',
@@ -62,15 +66,16 @@ export const createTestDB= () => {
   VALUES (1000.00, 'admin', '${hashed_password}', 'test1');
 
   INSERT INTO users (balance, permissions, password, username)
-  VALUES (1000.00, 'user', '${hashed_password}', 'test2');
-  `
+  VALUES (1000.00, 'user', '${hashed_password}', 'test2');`
 
   connection.query(query, (error, elements) => {
       if (error) {
       console.log(error);
+      reject(error);
       }
 
-      //   console.log(elements);
       connection.end()
+      resolve();
+    })
   })
 }

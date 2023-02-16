@@ -1,7 +1,5 @@
 // Import the necessary modules and dependencies
-const { User,  checkUser, updateBalance, registerUser } = require('../../src/model/User');
-import { connection } from "../../src/utils/db"
-import { Connection } from 'mysql';
+const { User,  checkUser, updateBalance, registerUser, getUser, checkBalance, checkPassword, checkPermissions } = require('../../src/model/User');
 import { createTestDB } from '../../src/mock_data/createDB';
 import { deleteTestDB } from '../../src/mock_data/deleteDB';
 
@@ -10,25 +8,27 @@ const req = {
   username: 'test1',
   password: 'xxx',
   user_id: '1',
+  current_user: null
 };
 
 const res = {};
 
-// jest.mock('../../src/config/general.config')
+beforeAll( async ()=>{
+  await createTestDB();
+});
 
 beforeEach(() => {
   jest.resetModules();
-  createTestDB
 });
 
-afterEach(() => {
-  deleteTestDB
+afterAll( () => {
+   deleteTestDB();
 });
 
 describe('checkUser function', () => {
   // Test function is a promise
-  test('checkUser returns a Promise', async () => {
-    const result = await checkUser(req, res);
+  test('checkUser returns a Promise', () => {
+    const result = checkUser(req, res);
     expect(result).toBeInstanceOf(Promise);
   });
 
@@ -55,17 +55,7 @@ describe('checkUser function', () => {
 });
 
 
-describe('updateBalance function', () => {
-  test('updateBalance returns a Promise', async () => {
-    const req = {
-      action_type: '+',
-      amount_to_requested: 100,
-      current_user: new User(1, 500, 'user', 'testUser')
-    };
-    const res = {};
-    const result = await updateBalance(req, res);
-    expect(result).toBeInstanceOf(Promise);
-  });
+describe('updateBalance/registerUser/getUser function', () => {
 
   test('updateBalance fullfills', async () => {
     const req = {
@@ -77,30 +67,79 @@ describe('updateBalance function', () => {
     const result = await updateBalance(req, res);
     expect(result).resolves;
   });
+
+  test('updateBalance rejects', async () => {
+    const req = {
+      action_type: '+',
+      amount_to_requested: 100,
+      current_user: new User(10, 500, 'user', 'badUser')
+    };
+    const res = {};
+    await expect(updateBalance(req, res)).rejects
+  });
+
+  test('registerUser fullfills', async () => {
+    const req = {
+      password: '123',
+      role: 'admin',
+      username: 'user1'
+    };
+    const res = {};
+    const result = await registerUser(req, res);
+    expect(result).resolves;
+  });
+
+  test('registerUser rejects', async () => {
+    const req = {
+      password: '123',
+      role: 'admin',
+      username: 'user1'
+    };
+    const res = {};
+    await expect(registerUser(req, res)).rejects.toMatch('User name taken. Please user other username')
+  });
+
 });
 
-// describe('registerUser function', () => {
-//   test('updateBalance returns a Promise', async () => {
-//     const req = {
-//       password: '123',
-//       role: 'admin',
-//       username: 'user1'
-//     };
-//     const res = {};
-//     const result = await registerUser(req, res);
-//     expect(result).toBeInstanceOf(Promise);
-//   });
+describe('getUser function', () => {
 
-//   test('updateBalance fullfills', async () => {
-//     const req = {
-//       password: '123',
-//       role: 'admin',
-//       username: 'user1'
-//     };
-//     const res = {};
-//     const result = await registerUser(req, res);
-//     expect(result).resolves;
-//   });
-// });
+  test('sets the current_user property of the request object when the user is found', async () => {
+    const req = { user_id: 1,
+                  current_user: "Hello" 
+                };
+    
+    await getUser(req, res);
+    const actualUser = new User ( 1, 100, 'admin','test1');
 
-// Test the rest of the functions 
+    expect(req.current_user).toEqual(actualUser);
+  });
+
+  test('rejects with an error message when the user is not found', async () => {
+    const req = { user_id: 10 };
+    await expect(getUser(req, res)).rejects.toMatch('ERROR: No such user');
+  });
+});
+
+describe('checkPermissions', () => {
+  test('returns true if user has admin permissions', () => {
+    const user = new User ( 1, 1000, 'admin','test1');
+    expect(checkPermissions(user)).toBe(true);
+  });
+
+  test('returns false if user does not have admin permissions', () => {
+    const user = new User ( 1, 1000, 'user','test1');
+    expect(checkPermissions(user)).toBe(false);
+  });
+});
+
+describe('checkBalance', () => {
+  test('returns true if user has enough balance', () => {
+    const user = new User ( 1, 100, 'admin','test1');
+    expect(checkBalance(user, 50)).toBe(true);
+  });
+
+  test('returns false if user does not have enough balance', () => {
+    const user = new User ( 1, 50, 'admin','test1');
+    expect(checkBalance(user, 100)).toBe(false);
+  });
+});

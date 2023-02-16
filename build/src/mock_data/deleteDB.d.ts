@@ -1,1 +1,1 @@
-export declare const deleteTestDB: () => void;
+export declare const deleteTestDB: () => Promise<void>;

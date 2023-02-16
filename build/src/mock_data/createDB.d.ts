@@ -1,1 +1,1 @@
-export declare const createTestDB: () => void;
+export declare const createTestDB: () => Promise<void>;

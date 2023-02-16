@@ -54,13 +54,11 @@ const checkUser = (req, res) => {
     logger_1.log.info('Checking user existence');
     return new Promise((resolve, reject) => {
         const query = 'SELECT * ' + 'FROM users ' + `WHERE username = "${req.username}"`;
-        console.log(query);
         db_1.connection.query(query, (error, elements) => {
             if (error) {
                 logger_1.log.error(error);
                 return reject(error);
             }
-            console.log(elements);
             if (elements.length < 1) {
                 logger_1.log.error('wrong password or username');
                 return reject('Error: Wrong password or username');
@@ -131,7 +129,7 @@ const registerUser = (req, res) => {
         db_1.connection.query(query, (error, elements) => {
             if (error) {
                 logger_1.log.error(error);
-                return reject(error);
+                return reject("User name taken. Please user other username");
             }
             logger_1.log.info('User registered');
             return resolve();

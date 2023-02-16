@@ -19,6 +19,7 @@
     "start": "ts-node ./src/service/index.ts",
     "test": "jest --watchAll",
     "build": "tsc",
+    "mock":"ts-node ./src/service/test.ts",
     "create": "ts-node ./src/mock_data/createDB.ts",
     "delete": "ts-node ./src/mock_data/deleteDB.ts"
   },

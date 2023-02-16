@@ -69,13 +69,12 @@ const checkUser = (req: any, res: object): Promise<User> => {
     const query =
       'SELECT * ' + 'FROM users ' + `WHERE username = "${req.username}"`;
 
-      console.log(query);
     connection.query(query, (error, elements) => {
       if (error) {
         log.error(error);
         return reject(error);
       }
-      console.log(elements)
+
       if (elements.length < 1) {
         log.error('wrong password or username');
         return reject('Error: Wrong password or username');
@@ -166,7 +165,7 @@ const registerUser = (req: any, res: object): Promise<void> => {
     connection.query(query, (error, elements) => {
       if (error) {
         log.error(error);
-        return reject(error);
+        return reject("User name taken. Please user other username");
       }
 
       log.info('User registered');
