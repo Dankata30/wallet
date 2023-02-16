@@ -21,7 +21,8 @@
     "build": "tsc",
     "mock":"ts-node ./src/service/test.ts",
     "create": "ts-node ./src/mock_data/createDB.ts",
-    "delete": "ts-node ./src/mock_data/deleteDB.ts"
+    "delete": "ts-node ./src/mock_data/deleteDB.ts",
+    "setDb":"ts-node ./src/util/createDB.ts"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
