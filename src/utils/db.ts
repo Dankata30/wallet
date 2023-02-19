@@ -7,8 +7,6 @@ dotenv.config();
 
 import conf from '../config/general.config';
 
-console.log(Object.keys(conf) + "sadsadasdadsds");
-console.log(conf.DATABASE + " HEREEEEEEEEEEEE");
 
 const connection: Connection = mysql.createConnection({
   host: conf.HOST,
