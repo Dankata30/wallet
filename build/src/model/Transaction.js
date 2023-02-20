@@ -24,7 +24,7 @@ const recordTransaction = (req, res) => {
         db_1.connection.query(query, (error, elements) => {
             if (error) {
                 logger_1.log.error(error);
-                return reject(error);
+                return reject("Database Error");
             }
             logger_1.log.info('Transaction recorded');
             return resolve(true);
@@ -46,7 +46,7 @@ const getTransactions = (req, res) => {
         db_1.connection.query(query, (error, elements) => {
             if (error) {
                 logger_1.log.error(error);
-                return reject(error);
+                return reject("Database Error");
             }
             const output = Object.keys(elements).map(key => {
                 return new Transaction(elements[key].t_id, elements[key].t_id, elements[key].type, elements[key].amount).toString();

@@ -74,7 +74,17 @@ const createTestDB = () => {
   VALUES (2, 'true', '2021-02-28 23:59:59');
   
   INSERT INTO sessions (user_id, is_active, expiry) 
-  VALUES (3, 'false', '${(0, date_1.currentDateTime)()}');`;
+  VALUES (3, 'false', '${(0, date_1.currentDateTime)()}');
+  
+  INSERT INTO transactions (user_id, type, amount) 
+  VALUES (1, 'deposit', '100');
+  
+  INSERT INTO transactions (user_id, type, amount) 
+  VALUES (1, 'withdraw', '50');
+  
+  INSERT INTO transactions (user_id, type, amount) 
+  VALUES (3, 'deposit', '50');
+  `;
         connection.query(query, (error, elements) => {
             if (error) {
                 console.log(error);

@@ -32,7 +32,7 @@ const recordTransaction = (req: any, res: object): Promise<boolean> => {
     connection.query(query, (error, elements) => {
       if (error) {
         log.error(error);
-        return reject(error);
+        return reject("Database Error");
       }
 
       log.info('Transaction recorded');
@@ -57,7 +57,7 @@ const getTransactions = (req: any, res: object): Promise<void> => {
     connection.query(query, (error, elements) => {
       if (error) {
         log.error(error);
-        return reject(error);
+        return reject("Database Error");
       }
 
       const output = Object.keys(elements).map(key => {
