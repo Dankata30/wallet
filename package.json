@@ -17,7 +17,7 @@
     "pretest": "npm run compile",
     "posttest": "npm run lint",
     "start": "ts-node ./src/service/index.ts",
-    "test": "jest --watchAll",
+    "test": "jest --watchAll --runInBand",
     "build": "tsc",
     "mock":"ts-node ./src/service/test.ts",
     "create": "ts-node ./src/mock_data/createDB.ts",

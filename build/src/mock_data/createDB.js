@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createTestDB = void 0;
+const date_1 = require("../utils/date");
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
@@ -61,7 +62,19 @@ const createTestDB = () => {
   VALUES (1000.00, 'admin', '${hashed_password}', 'test1');
 
   INSERT INTO users (balance, permissions, password, username)
-  VALUES (1000.00, 'user', '${hashed_password}', 'test2');`;
+  VALUES (1000.00, 'user', '${hashed_password}', 'test2');
+
+  INSERT INTO users (balance, permissions, password, username)
+  VALUES (1000.00, 'user', '${hashed_password}', 'test3');
+  
+  INSERT INTO sessions (user_id, is_active, expiry) 
+  VALUES (1, 'true', '2021-02-28 23:59:59');
+  
+  INSERT INTO sessions (user_id, is_active, expiry) 
+  VALUES (2, 'true', '2021-02-28 23:59:59');
+  
+  INSERT INTO sessions (user_id, is_active, expiry) 
+  VALUES (3, 'false', '${(0, date_1.currentDateTime)()}');`;
         connection.query(query, (error, elements) => {
             if (error) {
                 console.log(error);

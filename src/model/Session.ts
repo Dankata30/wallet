@@ -43,7 +43,7 @@ const createSession = (req: any, res: object): Promise<boolean> => {
     connection.query(query, (error, elements) => {
       if (error) {
         log.error(error);
-        return reject(error);
+        return reject('bad request');
       }
 
       log.info('Session created');
@@ -67,7 +67,7 @@ const extendSession = (req: any, res: object): Promise<boolean> => {
     connection.query(query, (error, elements) => {
       if (error) {
         log.error(error);
-        return reject(error);
+        return reject("Cannot extend session");
       }
 
       log.info('Session extended');
@@ -87,7 +87,7 @@ const checkSession = (req: any, res: object): Promise<void> => {
     connection.query(query, (error, elements) => {
       if (error) {
         log.error(error);
-        return reject(error);
+        return reject("Database error");
       }
 
       if (elements.length > 0) {
@@ -127,7 +127,7 @@ const deactivateSession = (req: any, res: object): Promise<boolean> => {
     connection.query(query, (error, elements) => {
       if (error) {
         log.error(error);
-        return reject(error);
+        return reject("Database Error");
       }
       log.info('Session deativated');
       return resolve(true);

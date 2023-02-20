@@ -6,8 +6,6 @@ const mysql = require('mysql');
 const dotenv = require('dotenv');
 dotenv.config();
 const general_config_1 = require("../config/general.config");
-console.log(Object.keys(general_config_1.default) + "sadsadasdadsds");
-console.log(general_config_1.default.DATABASE + " HEREEEEEEEEEEEE");
 const connection = mysql.createConnection({
     host: general_config_1.default.HOST,
     user: general_config_1.default.USERNAME,

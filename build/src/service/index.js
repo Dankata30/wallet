@@ -11,38 +11,39 @@ const port = general_config_1.default.PORT;
 const requestListener = (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     switch (true) {
-        case req.url.includes('/auth/login'):
+        case req.url.includes('/auth/login') && req.method === "POST":
             logger_1.log.warn('/auth/login');
             (0, UserController_1.login)(req, res);
             break;
-        case req.url.includes('/auth/logout'):
+        case req.url.includes('/auth/logout') && req.method === "POST":
             logger_1.log.warn('/auth/logout');
             (0, UserController_1.logout)(req, res);
             break;
-        case req.url.includes('/user/balance'):
+        case req.url.includes('/user/balance') && req.method === "GET":
             logger_1.log.warn('\n/user/balance');
             (0, UserController_1.getBalance)(req, res);
             break;
-        case req.url.includes('/wallet/list'):
+        case req.url.includes('/wallet/list') && req.method === "GET":
             logger_1.log.warn('\n/wallet/list');
             (0, TransactionsController_1.listTransactions)(req, res);
             break;
-        case req.url.includes('/wallet/deposit'):
+        case req.url.includes('/wallet/deposit') && req.method === "PUT":
             logger_1.log.warn('\n/wallet/deposit');
             (0, TransactionsController_1.deposit)(req, res);
             break;
-        case req.url.includes('/wallet/withdraw'):
+        case req.url.includes('/wallet/withdraw') && req.method === "PUT":
             logger_1.log.warn('\n/wallet/withdraw');
             (0, TransactionsController_1.withdraw)(req, res);
             break;
-        case req.url.includes('/register'):
+        case req.url.includes('/register') && req.method === "POST":
             logger_1.log.warn('\n/register');
             (0, UserController_1.register)(req, res);
             break;
         default:
+            logger_1.log.error(`Resource not found: ${req.method} ${req.url}`);
             res.writeHead(404);
             res.end(JSON.stringify({
-                error: 'Resource not found',
+                error: `Resource not found: ${req.method} ${req.url}`,
             }));
             break;
     }

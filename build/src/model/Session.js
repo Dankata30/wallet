@@ -27,7 +27,7 @@ const createSession = (req, res) => {
         db_1.connection.query(query, (error, elements) => {
             if (error) {
                 logger_1.log.error(error);
-                return reject(error);
+                return reject('bad request');
             }
             logger_1.log.info('Session created');
             return resolve(true);
@@ -46,7 +46,7 @@ const extendSession = (req, res) => {
         db_1.connection.query(query, (error, elements) => {
             if (error) {
                 logger_1.log.error(error);
-                return reject(error);
+                return reject("Cannot extend session");
             }
             logger_1.log.info('Session extended');
             return resolve(true);
@@ -63,7 +63,7 @@ const checkSession = (req, res) => {
         db_1.connection.query(query, (error, elements) => {
             if (error) {
                 logger_1.log.error(error);
-                return reject(error);
+                return reject("Database error");
             }
             if (elements.length > 0) {
                 const session = new Session(elements[0].session_id, elements[0].user_id, elements[0].is_active, elements[0].expiry);
@@ -95,7 +95,7 @@ const deactivateSession = (req, res) => {
         db_1.connection.query(query, (error, elements) => {
             if (error) {
                 logger_1.log.error(error);
-                return reject(error);
+                return reject("Database Error");
             }
             logger_1.log.info('Session deativated');
             return resolve(true);

@@ -1,4 +1,5 @@
 import {Connection} from 'mysql';
+import {currentDateTime} from '../utils/date'
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
 
@@ -66,7 +67,19 @@ export const createTestDB= () : Promise<void> => {
   VALUES (1000.00, 'admin', '${hashed_password}', 'test1');
 
   INSERT INTO users (balance, permissions, password, username)
-  VALUES (1000.00, 'user', '${hashed_password}', 'test2');`
+  VALUES (1000.00, 'user', '${hashed_password}', 'test2');
+
+  INSERT INTO users (balance, permissions, password, username)
+  VALUES (1000.00, 'user', '${hashed_password}', 'test3');
+  
+  INSERT INTO sessions (user_id, is_active, expiry) 
+  VALUES (1, 'true', '2021-02-28 23:59:59');
+  
+  INSERT INTO sessions (user_id, is_active, expiry) 
+  VALUES (2, 'true', '2021-02-28 23:59:59');
+  
+  INSERT INTO sessions (user_id, is_active, expiry) 
+  VALUES (3, 'false', '${currentDateTime()}');`
 
   connection.query(query, (error, elements) => {
       if (error) {

@@ -54,6 +54,7 @@ const requestListener = (req: any, res: any) => {
       register(req, res);
       break;
     default:
+      log.error(`Resource not found: ${req.method} ${req.url}`);
       res.writeHead(404);
       res.end(
         JSON.stringify({
